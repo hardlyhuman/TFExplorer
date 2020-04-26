@@ -3,5 +3,6 @@
 
 
 For any queries, reach out to:
-Sri Harsha Gajavalli [mailto:sriharsha.g15@gmail.com]
-Adwait Thattey
+* Sri Harsha Gajavalli <mailto:sriharsha.g15@gmail.com>
+* Adwait Thattey
+* Shreyash
