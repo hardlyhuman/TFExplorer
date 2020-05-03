@@ -1,0 +1,39 @@
+dist: bionic
+
+language: python
+
+python:
+  - 3.6
+  - 3.7
+  - 3.8
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - black --skip-string-normalization --line-length=79 --check --diff .
+  - flake8 .
+  - pylint --errors-only TFExplorer manage.py
+  - python manage.py check
+
+jobs:
+  include:    
+    - name : sqlite3 tests
+      script:
+        - python manage.py migrate
+        - python manage.py check
+        - python manage.py test 
+    
+    - name : postgresql tests
+      services:
+        - postgresql
+      before_script:
+        - psql -c 'create database travis_ci_test;' -U postgres
+        - bash ./test/settings/travis_psql.sh
+      script:
+        - python manage.py migrate
+        - python manage.py check
+        - python manage.py test
+      after_script:
+        - rm ./TFExplorer/local_settings.py
+      
