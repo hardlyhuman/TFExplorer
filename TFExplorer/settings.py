@@ -122,8 +122,10 @@ STATIC_URL = '/static/'
 
 
 try:
-    from .local_settings import *
+    from .local_settings import *  # noqa: F401,F403
 except ImportError:
     if not DEBUG:
-        warnings.warn(" You have kept DEBUG=FALSE without a local_settings. \
-            It is recommended to keep prod settings seperate in local_settings.py ")
+        warnings.warn(
+            " You have kept DEBUG=FALSE without a local_settings. \
+            It is recommended to keep prod settings seperate in local_settings.py "
+        )
