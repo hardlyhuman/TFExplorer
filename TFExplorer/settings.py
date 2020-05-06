@@ -135,7 +135,7 @@ LOGGING = {
             'filename': 'logs/main_debug.log',
             'maxBytes': 1024 * 1024 * 5,
             'backupCount': 7,
-            #'formatter': 'main_formatter',
+            # 'formatter': 'main_formatter',
             'filters': ['require_debug_true'],
         },
         'null': {"class": 'logging.NullHandler',},
