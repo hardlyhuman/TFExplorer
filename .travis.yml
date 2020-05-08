@@ -11,7 +11,7 @@ install:
   - pip install -r requirements.txt
 
 script:
-  - black --skip-string-normalization --line-length=79 --check --diff .
+  - black --config=black.toml .
   - flake8 .
   - pylint --errors-only TFExplorer manage.py
   - python manage.py check
