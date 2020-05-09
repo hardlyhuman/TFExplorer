@@ -11,7 +11,7 @@ class API(Model):
     link = models.URLField(max_length=256)
 
 
-class API_Variant(Model):
+class APIVariant(Model):
     api = models.ForeignKey(API, on_delete=models.CASCADE)
     usage = models.CharField(max_length=256)
     description = models.CharField(max_length=256)

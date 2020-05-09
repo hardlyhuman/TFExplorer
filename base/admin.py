@@ -1,3 +1,5 @@
-# from django.contrib import admin
+from django.contrib import admin
+from base.models import API, APIVariant
 
-# Register your models here.
+admin.site.register(API)
+admin.site.register(APIVariant)
