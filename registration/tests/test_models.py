@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from registration.models import User
+from django.conf import settings
 
 
 class UserModelTest(TestCase):
@@ -28,16 +29,34 @@ class UserModelTest(TestCase):
             last_name='Doe',
             email='johndoe@example.com',
         )
-        with self.assertRaisesMessage(
-            IntegrityError,
-            'UNIQUE constraint failed: registration_user.username',
+        if (
+            settings.DATABASES['default']['ENGINE']
+            == 'django.db.backends.postgresql_psycopg2'
         ):
-            User.objects.create(
-                username='johndoe',
-                first_name='John',
-                last_name='Doe',
-                email='johndoe2@example.com',
-            )
+            with self.assertRaisesRegex(
+                IntegrityError,
+                r'duplicate key value violates unique constraint.*username.*',
+            ):
+                User.objects.create(
+                    username='johndoe',
+                    first_name='John',
+                    last_name='Doe',
+                    email='johndoe2@example.com',
+                )
+        elif (
+            settings.DATABASES['default']['ENGINE']
+            == 'django.db.backends.sqlite3'
+        ):
+            with self.assertRaisesMessage(
+                IntegrityError,
+                'UNIQUE constraint failed: registration_user.username',
+            ):
+                User.objects.create(
+                    username='johndoe',
+                    first_name='John',
+                    last_name='Doe',
+                    email='johndoe2@example.com',
+                )
 
     def test_does_not_allow_duplicate_email(self):
         User.objects.create(
@@ -46,16 +65,34 @@ class UserModelTest(TestCase):
             last_name='Doe',
             email='johndoe@example.com',
         )
-        with self.assertRaisesMessage(
-            IntegrityError,
-            'UNIQUE constraint failed: registration_user.email',
+        if (
+            settings.DATABASES['default']['ENGINE']
+            == 'django.db.backends.postgresql_psycopg2'
         ):
-            User.objects.create(
-                username='johndoe2',
-                first_name='John',
-                last_name='Doe',
-                email='johndoe@example.com',
-            )
+            with self.assertRaisesRegex(
+                IntegrityError,
+                r'duplicate key value violates unique constraint.*email.*',
+            ):
+                User.objects.create(
+                    username='johndoe2',
+                    first_name='John',
+                    last_name='Doe',
+                    email='johndoe@example.com',
+                )
+        elif (
+            settings.DATABASES['default']['ENGINE']
+            == 'django.db.backends.sqlite3'
+        ):
+            with self.assertRaisesMessage(
+                IntegrityError,
+                'UNIQUE constraint failed: registration_user.email',
+            ):
+                User.objects.create(
+                    username='johndoe2',
+                    first_name='John',
+                    last_name='Doe',
+                    email='johndoe@example.com',
+                )
 
     def test_saves_correct_hash_password(self):
         user = User.objects.create(
