@@ -22,7 +22,7 @@ jobs:
       script:
         - python manage.py migrate
         - python manage.py check
-        - python manage.py test 
+        - python manage.py test --verbosity 2
     
     - name : postgresql tests
       services:
@@ -33,7 +33,7 @@ jobs:
       script:
         - python manage.py migrate
         - python manage.py check
-        - python manage.py test
+        - python manage.py test --verbosity 2
       after_script:
         - rm ./TFExplorer/local_settings.py
       
